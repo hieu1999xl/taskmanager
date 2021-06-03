@@ -1,0 +1,136 @@
+﻿@model IEnumerable<TaskManager.Models.Task>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+
+    <body>
+        @if (@ViewBag.AccTo == null)
+        {
+            <h1>List Your All Tasks</h1>
+        }
+        else
+        {
+            <h1>List Your @ViewBag.AccTo Task</h1>
+        }
+
+        <p>
+            <a asp-action="Create">Create Your Task</a>
+        </p>
+        <br>
+
+
+        <form method="post" name="accToWh" action="List" style="width:70%;display:inline-block">
+            
+            <fieldset>
+                <div class="form-control-range">
+                    <div style="display:inline-block">
+                        @* Show Completed and Past Tasks  *@
+                        <h6> Show Tasks </h6>
+                        <input type="checkbox" name="completedTask" value="true">&nbsp; Completed Tasks &emsp;
+                        <input type="checkbox" name="pastTask" value="true">&nbsp;Past Tasks
+                    </div>
+                    <div style="display:inline-block;margin:0px 100px">
+                        @*   List tasks according to what(daily,weekly,yearly)  *@
+                        <h6> List Tasks by which Time Period</h6>
+                        <input type="radio" name="accToWhat" value="Monthly">&nbsp; Monthly&emsp;
+                        <input type="radio" name="accToWhat" value="Weekly">&nbsp;Weekly &emsp;
+                        <input type="radio" name="accToWhat" value="Daily">&nbsp;Daily &emsp;
+                        <input type="radio" name="accToWhat" value="All">&nbsp;All
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+        
+        <table class="table" style="margin-top:10px">
+            <thead>
+                <tr>
+                    <th>
+                        Title
+                    </th>
+                    <th>
+                        Notes
+                    </th>
+                    <th>
+                        Start Date
+                    </th>
+                    <th>
+                        End Date
+                    </th>
+                    <th>
+                        Is Completed?
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        @if (item.startDate >= System.DateTime.Now)
+                        {
+                            <td style="color:#000">
+                                @Html.DisplayFor(modelItem => item.title)
+                            </td>
+                            <td style="color:#000;width:50px">
+                                @Html.DisplayFor(modelItem => item.notes)
+                            </td>
+                            <td style="color:#000">
+                                @Html.DisplayFor(modelItem => item.startDate)
+                            </td>
+                            <td style="color:#000">
+                                @Html.DisplayFor(modelItem => item.endDate)
+                            </td>
+                            <td style="color:#000">
+                                @Html.DisplayFor(modelItem => item.isCompleted)
+                            </td>
+
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
+                                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
+                                <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                            </td>
+                        }
+                        else
+                        {
+                            <td style="color:#A0A0A0">
+                                @Html.DisplayFor(modelItem => item.title)
+                            </td>
+                            <td style="color:#A0A0A0;width:50px">
+                                @Html.DisplayFor(modelItem => item.notes)
+                            </td>
+                            <td style="color:#A0A0A0">
+                                @Html.DisplayFor(modelItem => item.startDate)
+                            </td>
+                            <td style="color:#A0A0A0">
+                                @Html.DisplayFor(modelItem => item.endDate)
+                            </td>
+                            <td style="        color: #A0A0A0
+">
+                                @Html.DisplayFor(modelItem => item.isCompleted)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
+                                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
+                                <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                            </td>
+
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+
+        <script type='text/javascript'>
+            @* To dynamically post time period by checking radiobutton *@
+            var rad = document.accToWh.accToWhat;
+            for (var i = 0; i < rad.length; i++) {
+                rad[i].addEventListener('change', function () {
+                    $('form').submit();
+                });
+            }
+        </script>
+
+    </body>
